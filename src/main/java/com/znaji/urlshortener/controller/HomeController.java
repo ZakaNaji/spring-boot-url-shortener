@@ -22,7 +22,7 @@ public class HomeController {
 
     @GetMapping
     public String hello(Model model) {
-        List<ShortUrl> urls = shortUrlRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<ShortUrl> urls = shortUrlRepository.findShortUrlByIsPrivateFalseOrderByCreatedAtDesc();
         model.addAttribute("shortUrls", urls);
         model.addAttribute("baseUrl", "http://localhost:8080");
         return "Hello";
