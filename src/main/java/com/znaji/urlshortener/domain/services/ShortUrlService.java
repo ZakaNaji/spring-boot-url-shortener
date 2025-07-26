@@ -1,5 +1,6 @@
 package com.znaji.urlshortener.domain.services;
 
+import com.znaji.urlshortener.domain.config.ApplicationProperties;
 import com.znaji.urlshortener.domain.entity.ShortUrl;
 import com.znaji.urlshortener.domain.model.CreateShortUrlForm;
 import com.znaji.urlshortener.domain.model.ShortUrlDto;
@@ -18,10 +19,12 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class ShortUrlService {
     private final ShortUrlRepository shortUrlRepository;
     private final EntityMapper entityMapper;
+    private final ApplicationProperties applicationProperties;
 
-    public ShortUrlService(ShortUrlRepository shortUrlRepository, EntityMapper entityMapper) {
+    public ShortUrlService(ShortUrlRepository shortUrlRepository, EntityMapper entityMapper, ApplicationProperties applicationProperties) {
         this.shortUrlRepository = shortUrlRepository;
         this.entityMapper = entityMapper;
+        this.applicationProperties = applicationProperties;
     }
 
     public List<ShortUrlDto> findAllPublicUrls() {
@@ -38,7 +41,7 @@ public class ShortUrlService {
         shortUrl.setCreatedBy(null);
         shortUrl.setPrivate(false);
         shortUrl.setClickCount(0L);
-        shortUrl.setExpiresAt(Instant.now().plus(30L, DAYS));
+        shortUrl.setExpiresAt(Instant.now().plus(applicationProperties.defaultExpireInDays(), DAYS));
         shortUrl.setCreatedAt(Instant.now());
         shortUrlRepository.save(shortUrl);
         return entityMapper.toShortUrlDto(shortUrl);

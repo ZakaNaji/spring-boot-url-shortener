@@ -1,6 +1,7 @@
 package com.znaji.urlshortener.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.znaji.urlshortener.domain.config.ApplicationProperties;
 import com.znaji.urlshortener.domain.model.CreateShortUrlForm;
 import com.znaji.urlshortener.domain.model.ShortUrlDto;
 import com.znaji.urlshortener.domain.model.UserDto;
@@ -26,16 +27,19 @@ public class HomeController {
 
 
     private final ShortUrlService shortUrlService;
+    private final ApplicationProperties applicationProperties;
 
-    public HomeController(ShortUrlService shortUrlService) {
+
+    public HomeController(ShortUrlService shortUrlService, ApplicationProperties applicationProperties) {
         this.shortUrlService = shortUrlService;
+        this.applicationProperties = applicationProperties;
     }
 
     @GetMapping
     public String hello(Model model) {
         List<ShortUrlDto> urls = shortUrlService.findAllPublicUrls();
         model.addAttribute("shortUrls", urls);
-        model.addAttribute("baseUrl", "http://localhost:8080");
+        model.addAttribute("baseUrl", applicationProperties.baseUrl());
         model.addAttribute("createShortUrlForm", new CreateShortUrlForm(""));
         return "index";
     }
@@ -65,14 +69,14 @@ public class HomeController {
         if (result.hasErrors()) {
             List<ShortUrlDto> urls = shortUrlService.findAllPublicUrls();
             model.addAttribute("shortUrls", urls);
-            model.addAttribute("baseUrl", "http://localhost:8080");
+            model.addAttribute("baseUrl", applicationProperties.baseUrl());
             return "index";
         }
 
         try {
             ShortUrlDto shortUrlDto = shortUrlService.createShortUrl(shortUrlForm);
             redirectAttributes.addFlashAttribute("successMessage", "Short URL created successfully "+
-                    "localhost:8080/s/"+shortUrlDto.shortKey());
+                    applicationProperties.baseUrl() +shortUrlDto.shortKey());
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to create short URL");
