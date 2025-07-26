@@ -1,4 +1,4 @@
-package com.znaji.urlshortener.repository;
+package com.znaji.urlshortener.domain.repository;
 
 import com.znaji.urlshortener.domain.entity.ShortUrl;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -12,4 +12,6 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrl, Long> {
     @Query("select su from ShortUrl su where su.isPrivate = false order by su.createdAt desc ")
     @EntityGraph(attributePaths = "createdBy")
     List<ShortUrl> findAllPublicUrls();
+
+    boolean existsByShortKey(String shortKey);
 }

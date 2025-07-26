@@ -2,6 +2,7 @@ package com.znaji.urlshortener.domain.entity;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,9 +25,9 @@ public class ShortUrl {
 
     private Boolean isPrivate;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Instant createdAt ;
 
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 
     private Long clickCount;
 
@@ -70,27 +71,27 @@ public class ShortUrl {
         isPrivate = aPrivate;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
-    }
-
     public Long getClickCount() {
         return clickCount;
     }
 
     public void setClickCount(Long clickCount) {
         this.clickCount = clickCount;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(Instant expiresAt) {
+        this.expiresAt = expiresAt;
     }
 }

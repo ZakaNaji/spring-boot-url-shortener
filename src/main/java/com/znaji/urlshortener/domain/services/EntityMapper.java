@@ -1,4 +1,4 @@
-package com.znaji.urlshortener.services;
+package com.znaji.urlshortener.domain.services;
 
 import com.znaji.urlshortener.domain.entity.ShortUrl;
 import com.znaji.urlshortener.domain.entity.User;
@@ -21,8 +21,8 @@ public class EntityMapper {
                 shortUrl.getOriginalUrl(),
                 userDto,
                 shortUrl.getPrivate(),
-                shortUrl.getExpiresAt(),
                 shortUrl.getCreatedAt(),
+                shortUrl.getExpiresAt(),
                 shortUrl.getClickCount()
         );
     }
