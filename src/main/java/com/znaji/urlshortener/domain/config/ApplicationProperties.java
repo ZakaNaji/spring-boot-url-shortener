@@ -16,6 +16,8 @@ public record ApplicationProperties(
         @Min(1)
         @Max(365)
         @DefaultValue(value = "30")
-        int defaultExpireInDays
+        int defaultExpireInDays,
+        @DefaultValue("false")
+        boolean validateUrlExistence
 ) {
 }

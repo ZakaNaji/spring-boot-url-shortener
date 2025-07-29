@@ -34,6 +34,11 @@ public class ShortUrlService {
     }
 
     public ShortUrlDto createShortUrl(CreateShortUrlForm shortUrlForm) {
+        if (applicationProperties.validateUrlExistence()) {
+            if (!UrlExistenceValidation.urlExists(shortUrlForm.originalUrl())) {
+                throw new IllegalArgumentException("invalid url " + shortUrlForm.originalUrl());
+            }
+        }
         var shortKey = generateUniqueShortKey();
         var shortUrl = new ShortUrl();
         shortUrl.setOriginalUrl(shortUrlForm.originalUrl());

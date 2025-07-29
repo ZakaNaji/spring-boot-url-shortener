@@ -76,10 +76,10 @@ public class HomeController {
         try {
             ShortUrlDto shortUrlDto = shortUrlService.createShortUrl(shortUrlForm);
             redirectAttributes.addFlashAttribute("successMessage", "Short URL created successfully "+
-                    applicationProperties.baseUrl() +shortUrlDto.shortKey());
+                    applicationProperties.baseUrl() + "/s/" + shortUrlDto.shortKey());
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to create short URL");
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to create short URL : " + e.getMessage());
         }
         return "redirect:/";
     }
