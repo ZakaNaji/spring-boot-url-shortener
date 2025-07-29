@@ -2,24 +2,24 @@ package com.znaji.urlshortener.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.znaji.urlshortener.domain.config.ApplicationProperties;
+import com.znaji.urlshortener.domain.exception.InvalidShortUrlKeyException;
 import com.znaji.urlshortener.domain.model.CreateShortUrlForm;
 import com.znaji.urlshortener.domain.model.ShortUrlDto;
 import com.znaji.urlshortener.domain.model.UserDto;
 import com.znaji.urlshortener.domain.services.ShortUrlService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Controller()
 @RequestMapping("/")
@@ -82,6 +82,15 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to create short URL : " + e.getMessage());
         }
         return "redirect:/";
+    }
+
+    @GetMapping("/s/{shortKey}")
+    public String redirectToOriginalUrl(@PathVariable("shortKey") String shortKey) {
+        Optional<ShortUrlDto> shortUrlDto = shortUrlService.findShortUrlByKey(shortKey);
+        if (shortUrlDto.isEmpty()) {
+            throw new InvalidShortUrlKeyException("invalid short key: " + shortKey);
+        }
+        return "redirect:" + shortUrlDto.get().originalUrl();
     }
 
 }
